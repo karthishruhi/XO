@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>XO GAME</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 50px;
+    }
+
+    .logo-container {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      box-shadow: 0 0 10px #c59b00;
+      margin-bottom: 30px;
+    }
+
+    .logo-container:hover {
+      box-shadow: inset 0 0 15px #c59b00, 0 0 15px #c59b00;
+      transform: scale(1.05);
+    }
+
+    .logo-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .main {
+      width: 90%;
+      max-width: 500px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      z-index: 1;
+    }
+
+    .box {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background-color: #000000;
+      border: 2px solid #C59B00;
+      background-size: cover;
+      background-position: center;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .box:hover {
+      transform: scale(1.05);
+    }
+
+    .winner {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background-color: rgba(255, 255, 255, 0.9);
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      display: none;
+      z-index: 2;
+      animation: popIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes popIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Logo -->
+  <div class="logo-container">
+    <img src="https://cdn.vectorstock.com/i/1000x1000/74/47/creative-modern-luxury-k-logo-template-initial-vector-42367447.webp" alt="Logo" />
+  </div>
+
+  <!-- Winner overlay -->
+  <div class="winner" onclick="resetBoard()"></div>
+
+  <!-- Game Board -->
+  <div class="main">
+    <div class="box" onclick="xo(0)"></div>
+    <div class="box" onclick="xo(1)"></div>
+    <div class="box" onclick="xo(2)"></div>
+    <div class="box" onclick="xo(3)"></div>
+    <div class="box" onclick="xo(4)"></div>
+    <div class="box" onclick="xo(5)"></div>
+    <div class="box" onclick="xo(6)"></div>
+    <div class="box" onclick="xo(7)"></div>
+    <div class="box" onclick="xo(8)"></div>
+  </div>
+
+  <script>
+    let image1 = 'url("https://img.freepik.com/premium-vector/creative-letter-x-logo-design-vector-template-logotype-gold-color-black-background_831218-838.jpg?w=900")';
+    let image2 = 'url("https://static.vecteezy.com/system/resources/previews/019/514/639/non_2x/letter-o-logo-design-for-business-and-company-identity-with-luxury-concept-free-vector.jpg")';
+    let image = image1;
+
+    function xo(a) {
+      let b = document.getElementsByClassName('box')[a].style;
+      if (!b.backgroundImage) {
+        b.backgroundImage = image;
+        if (checkWinner(image)) {
+          const winnerOverlay = document.getElementsByClassName('winner')[0];
+          winnerOverlay.style.backgroundImage = image;
+          winnerOverlay.style.display = "block";
+        }
+        image = image === image1 ? image2 : image1;
+      } else {
+        alert("Invalid move!");
+      }
+    }
+
+    function checkWinner(image) {
+      let boxes = document.getElementsByClassName('box');
+      return (
+        (boxes[0].style.backgroundImage === image && boxes[1].style.backgroundImage === image && boxes[2].style.backgroundImage === image) ||
+        (boxes[3].style.backgroundImage === image && boxes[4].style.backgroundImage === image && boxes[5].style.backgroundImage === image) ||
+        (boxes[6].style.backgroundImage === image && boxes[7].style.backgroundImage === image && boxes[8].style.backgroundImage === image) ||
+        (boxes[0].style.backgroundImage === image && boxes[3].style.backgroundImage === image && boxes[6].style.backgroundImage === image) ||
+        (boxes[1].style.backgroundImage === image && boxes[4].style.backgroundImage === image && boxes[7].style.backgroundImage === image) ||
+        (boxes[2].style.backgroundImage === image && boxes[5].style.backgroundImage === image && boxes[8].style.backgroundImage === image) ||
+        (boxes[0].style.backgroundImage === image && boxes[4].style.backgroundImage === image && boxes[8].style.backgroundImage === image) ||
+        (boxes[2].style.backgroundImage === image && boxes[4].style.backgroundImage === image && boxes[6].style.backgroundImage === image)
+      );
+    }
+
+    function resetBoard() {
+      const boxes = document.getElementsByClassName('box');
+      for (let i = 0; i < boxes.length; i++) {
+        boxes[i].style.backgroundImage = "";
+      }
+      const winnerOverlay = document.getElementsByClassName('winner')[0];
+      winnerOverlay.style.backgroundImage = "";
+      winnerOverlay.style.display = "none";
+    }
+  </script>
+</body>
+</html>
